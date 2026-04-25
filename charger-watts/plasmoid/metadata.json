@@ -1,0 +1,14 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            { "Name": "eub" }
+        ],
+        "Category": "System Information",
+        "Description": "Show connected USB-C PD charger wattage",
+        "Id": "com.eub.chargerwatts",
+        "Name": "Charger Watts",
+        "Version": "1.2"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
