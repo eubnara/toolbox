@@ -78,6 +78,17 @@ kquitapp6 plasmashell && kstart plasmashell &
 
 위젯은 **순수 event-driven** 으로 동작한다 (폴링 없음). Plasma 의 `powermanagement` 데이터 엔진을 구독하고, 그 엔진은 내부적으로 Solid → UPower D-Bus `PropertiesChanged` 시그널을 받기 때문에 **충전기 연결/해제 edge 에서만** 신호가 들어온다. 그 시점에 EC 를 한 번 읽어 와트수를 갱신하고, 그 외엔 위젯이 깨어나지 않는다. 위젯을 클릭하면 강제 재읽기 (PD 가 edge 없이 재협상되는 경우 대비).
 
+직접 검증하려면 `execve` 를 추적하면서 충전기를 뺐다 꽂아본다 (`apt install bpftrace`):
+
+```bash
+sudo bpftrace -e '
+  tracepoint:syscalls:sys_enter_execve
+  /str(args->filename) == "/usr/local/bin/charger-watts"/
+  { time("%H:%M:%S "); printf("exec pid=%d ppid=%d comm=%s\n", pid, curtask->real_parent->tgid, comm); }'
+```
+
+연결/해제 edge 마다 한 줄씩만 찍히고 그 외엔 잠잠하면 event-driven 이 맞다. 폴링이었다면 2초 간격으로 계속 찍힐 것.
+
 ## 제거
 
 ```bash
