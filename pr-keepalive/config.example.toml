@@ -1,0 +1,13 @@
+# pr-keepalive — list the PRs you want to keep alive.
+# Format: "owner/repo#NUMBER"
+prs = [
+  # "apache/hadoop#1234",
+]
+
+# Bump if the PR has been inactive for at least this many days.
+# Tune per repo — apache/hadoop's stale-bot closes at 100 days, so 80
+# leaves a 20-day buffer.
+threshold_days = 80
+
+# Comment posted when bumping. Keep it brief.
+comment = "Friendly bump — still active, please keep open."

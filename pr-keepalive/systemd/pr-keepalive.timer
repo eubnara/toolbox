@@ -1,0 +1,15 @@
+[Unit]
+Description=Daily keep-alive check for long-running GitHub PRs
+
+[Timer]
+# Run shortly after boot…
+OnBootSec=5min
+# …and every 24h while the laptop stays on.
+OnUnitActiveSec=24h
+# If the laptop was off when a fire was due, run once at the next boot.
+Persistent=true
+# Spread out boot-time work a bit.
+RandomizedDelaySec=2min
+
+[Install]
+WantedBy=timers.target
