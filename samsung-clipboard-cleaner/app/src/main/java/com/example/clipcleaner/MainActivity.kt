@@ -47,13 +47,14 @@ class MainActivity : AppCompatActivity() {
         floodBtn.setOnClickListener { runFlood(50) }
 
         scheduleCheck.setOnCheckedChangeListener { _, on -> updateSchedule(on) }
-        scheduleTime.setOnTimeChangedListener { _, _, _ -> updateSchedule(scheduleCheck.isChecked) }
 
-        scheduleCheck.isChecked = Scheduler.enabled(this)
         val h = Scheduler.hour(this)
         val m = Scheduler.minute(this)
         scheduleTime.hour = h
         scheduleTime.minute = m
+
+        scheduleTime.setOnTimeChangedListener { _, _, _ -> updateSchedule(scheduleCheck.isChecked) }
+        scheduleCheck.isChecked = Scheduler.enabled(this)
         updateScheduleStatus()
     }
 
