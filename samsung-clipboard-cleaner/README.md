@@ -48,9 +48,28 @@ cd samsung-clipboard-cleaner
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
+## 권한
+
+| 권한 | 용도 | 부여 방식 |
+|------|------|----------|
+| `RECEIVE_BOOT_COMPLETED` | 부팅 후 스케줄 재등록 | 설치 시 자동 |
+| `POST_NOTIFICATIONS` | ForegroundService 알림 표시 (Android 13+) | **런타임 요청** |
+| `FOREGROUND_SERVICE` | 백그라운드 플러드 실행 | 설치 시 자동 |
+| `FOREGROUND_SERVICE_DATA_SYNC` | foregroundServiceType 지정 (Android 14+) | 설치 시 자동 |
+| `SCHEDULE_EXACT_ALARM` | 정확한 시간에 알람 실행 (Android 12+) | 설치 시 자동 |
+| `USE_EXACT_ALARM` | 정확한 시간에 알람 실행 (Android 14+) | 설치 시 자동 |
+
+## 보안
+
+소스 코드 공개 리뷰 결과:
+- 개인정보(이메일, IP, API 키, 토큰) 없음
+- 모든 컴포넌트 `exported="false"` — 외부 앱 호출 차단
+- `PendingIntent.FLAG_IMMUTABLE` — 인텐트 하이재킹 방지
+- `allowBackup="false"` — ADB 클립보드 백업 방지
+- 네트워크 미사용, 타앱 데이터 읽지 않음
+
 ## 참고
 
 - **SDK 26+ (Android 8.0+)**: `AlarmManager.setAlarmClock()` + `ForegroundService` 사용
-- **권한**: `RECEIVE_BOOT_COMPLETED`, `POST_NOTIFICATIONS`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_DATA_SYNC`
 - **의존성 최소화**: AndroidX, AppCompat 외 추가 라이브러리 없음
 - ContentProvider 방식 (`content://com.samsung.android.clipboardprovider/clipboard`)은 OneUI 5+에서 차단되어 사용 불가
