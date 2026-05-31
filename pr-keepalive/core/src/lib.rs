@@ -19,6 +19,8 @@ use std::process::Command;
 
 pub const DEFAULT_THRESHOLD_DAYS: i64 = 80;
 pub const DEFAULT_COMMENT: &str = "Friendly bump — still active, please keep open.";
+/// Re-notify every N days while a PR sits pending. `<= 0` disables renotification.
+pub const DEFAULT_RENOTIFY_AFTER_DAYS: i64 = 7;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
@@ -27,6 +29,8 @@ pub struct Config {
     pub threshold_days: i64,
     #[serde(default = "default_comment")]
     pub comment: String,
+    #[serde(default = "default_renotify_after_days")]
+    pub renotify_after_days: i64,
 }
 
 fn default_threshold_days() -> i64 {
@@ -34,6 +38,9 @@ fn default_threshold_days() -> i64 {
 }
 fn default_comment() -> String {
     DEFAULT_COMMENT.to_string()
+}
+fn default_renotify_after_days() -> i64 {
+    DEFAULT_RENOTIFY_AFTER_DAYS
 }
 
 impl Config {
@@ -119,6 +126,28 @@ pub struct PrState {
     /// When the user was last notified about this pending bump.
     #[serde(default)]
     pub pending_notified_at: Option<DateTime<Utc>>,
+}
+
+impl PrState {
+    /// True when this PR is pending and overdue for another reminder.
+    /// Returns false for non-pending PRs. `renotify_after_days <= 0` disables
+    /// renotification entirely. If `pending_notified_at` is None (e.g. state
+    /// from before this feature shipped, or notify was suppressed), treat as
+    /// overdue so the next run picks it up.
+    pub fn due_for_renotify(
+        &self,
+        renotify_after_days: i64,
+        now: DateTime<Utc>,
+    ) -> bool {
+        if !self.pending_confirmation || renotify_after_days <= 0 {
+            return false;
+        }
+        let interval = Duration::days(renotify_after_days);
+        match self.pending_notified_at {
+            None => true,
+            Some(t) => now - t >= interval,
+        }
+    }
 }
 
 impl State {
@@ -534,6 +563,7 @@ mod tests {
             prs: vec!["apache/hadoop#8458".into()],
             threshold_days: 80,
             comment: "bump".into(),
+            renotify_after_days: 7,
         }
     }
 
@@ -642,5 +672,55 @@ mod tests {
         let reports = run(&gh, &cfg(), &mut st, false);
         assert!(matches!(reports[0].outcome, Outcome::Skipped(_)));
         assert!(gh.comments.borrow().is_empty());
+    }
+
+    fn pending_pr(notified_days_ago: Option<i64>) -> PrState {
+        let now = Utc::now();
+        PrState {
+            slug: "apache/hadoop#8458".into(),
+            state: "OPEN".into(),
+            title: "t".into(),
+            url: "u".into(),
+            last_updated_at: now - Duration::days(90),
+            next_bump_at: now - Duration::days(10),
+            last_bump_at: None,
+            last_check_at: now,
+            last_check_result: "pending-new".into(),
+            pending_confirmation: true,
+            pending_since: Some(now - Duration::days(notified_days_ago.unwrap_or(0))),
+            pending_notified_at: notified_days_ago.map(|d| now - Duration::days(d)),
+        }
+    }
+
+    #[test]
+    fn due_for_renotify_when_overdue() {
+        let pr = pending_pr(Some(10));
+        assert!(pr.due_for_renotify(7, Utc::now()));
+    }
+
+    #[test]
+    fn not_due_when_recently_notified() {
+        let pr = pending_pr(Some(3));
+        assert!(!pr.due_for_renotify(7, Utc::now()));
+    }
+
+    #[test]
+    fn due_when_never_notified() {
+        let pr = pending_pr(None);
+        assert!(pr.due_for_renotify(7, Utc::now()));
+    }
+
+    #[test]
+    fn not_due_when_disabled() {
+        let pr = pending_pr(Some(100));
+        assert!(!pr.due_for_renotify(0, Utc::now()));
+        assert!(!pr.due_for_renotify(-1, Utc::now()));
+    }
+
+    #[test]
+    fn not_due_when_not_pending() {
+        let mut pr = pending_pr(Some(10));
+        pr.pending_confirmation = false;
+        assert!(!pr.due_for_renotify(7, Utc::now()));
     }
 }

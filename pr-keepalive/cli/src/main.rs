@@ -132,12 +132,18 @@ fn run_check(config: &Config, state: &mut State, args: &Args) -> ExitCode {
         }
     }
 
+    let now = Utc::now();
+    let due_for_renotify = state
+        .pending()
+        .iter()
+        .any(|p| p.due_for_renotify(config.renotify_after_days, now));
     let pending_total = state.pending().len();
-    if became_pending > 0 && !args.no_notify {
-        notify(pending_total);
-        // Mark notified for everything currently pending so we don't spam.
+
+    if (became_pending > 0 || due_for_renotify) && !args.no_notify {
+        let is_reminder = became_pending == 0 && due_for_renotify;
+        notify(pending_total, is_reminder);
         for p in state.pending_mut() {
-            p.pending_notified_at = Some(Utc::now());
+            p.pending_notified_at = Some(now);
         }
     }
 
@@ -264,10 +270,22 @@ fn run_confirm(config: &Config, state: &mut State, _args: &Args) -> ExitCode {
     }
 }
 
-fn notify(pending_count: usize) {
-    let body = format!(
-        "{pending_count} PR(s) ready to bump.\nRun: pr-keepalive --confirm"
-    );
+fn notify(pending_count: usize, is_reminder: bool) {
+    let (title, body) = if is_reminder {
+        (
+            "PR keep-alive (reminder)",
+            format!(
+                "{pending_count} PR(s) still pending bump.\nRun: pr-keepalive --confirm"
+            ),
+        )
+    } else {
+        (
+            "PR keep-alive",
+            format!(
+                "{pending_count} PR(s) ready to bump.\nRun: pr-keepalive --confirm"
+            ),
+        )
+    };
     let _ = Command::new("notify-send")
         .args([
             "-a",
@@ -276,7 +294,7 @@ fn notify(pending_count: usize) {
             "dialog-information",
             "-u",
             "normal",
-            "PR keep-alive",
+            title,
             &body,
         ])
         .status();

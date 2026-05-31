@@ -11,3 +11,9 @@ threshold_days = 80
 
 # Comment posted when bumping. Keep it brief.
 comment = "Friendly bump — still active, please keep open."
+
+# Re-fire the desktop notification every N days while a PR is pending and
+# hasn't been confirmed. Set to 0 (or negative) to disable renotification —
+# you'll then only get the one-time notification when a PR first crosses the
+# threshold.
+renotify_after_days = 7

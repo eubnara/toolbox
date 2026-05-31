@@ -17,7 +17,7 @@ Apache 같은 프로젝트는 [`actions/stale`](https://github.com/actions/stale
 ## 동작이 보수적인 이유
 
 - `threshold_days=80`, Apache 의 100일 stale window → PR 당 연 4~5회 코멘트가 한도
-- 임계치 도달 알림은 **PR 이 처음 pending 으로 넘어갈 때만** (이미 pending 인 건 추가 알림 없음)
+- 임계치 도달 알림은 **PR 이 처음 pending 으로 넘어갈 때** + `renotify_after_days` (기본 7일) 간격으로 리마인더 (놓쳐도 한 번만 받고 끝나지 않음)
 - 코멘트 본문은 짧은 한 줄 — 리뷰어 시간 빼앗지 않음
 
 ## 설치
@@ -47,6 +47,7 @@ prs = [
 ]
 threshold_days = 80
 comment = "Friendly bump — still active, please keep open."
+renotify_after_days = 7   # 0 으로 두면 리마인더 끔
 ```
 
 전체 형식은 [`config.example.toml`](./config.example.toml) 참고.
@@ -112,7 +113,6 @@ pr-keepalive/
 
 - [ ] Tauri 트레이 UI: 각 PR 의 `state` / `last_updated_at` / `next_bump_at` / `pending_confirmation` 표시. pending 인 항목은 클릭으로 confirm.
 - [ ] PR 별 `threshold_days` 오버라이드 (저장소마다 stale window 가 다른 경우)
-- [ ] pending 이 N일 이상 방치되면 알림 재전송
 
 ## 요구사항
 
