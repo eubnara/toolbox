@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.TimePicker
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var floodBtn: Button
+    private lateinit var countInput: EditText
 
     private lateinit var scheduleCheck: CheckBox
     private lateinit var scheduleTime: TimePicker
@@ -40,11 +42,18 @@ class MainActivity : AppCompatActivity() {
         statusText = findViewById(R.id.status_text)
         progressBar = findViewById(R.id.progress_bar)
         floodBtn = findViewById(R.id.btn_flood)
+        countInput = findViewById(R.id.count_input)
+        countInput.setText(Scheduler.count(this).toString())
         scheduleCheck = findViewById(R.id.schedule_check)
         scheduleTime = findViewById(R.id.schedule_time)
         scheduleStatus = findViewById(R.id.schedule_status)
 
-        floodBtn.setOnClickListener { runFlood(50) }
+        floodBtn.setOnClickListener {
+            val count = countInput.text.toString().toIntOrNull() ?: Scheduler.DEFAULT_COUNT
+            Scheduler.setCount(this, count)
+            countInput.setText(count.toString())
+            runFlood(count)
+        }
 
         scheduleCheck.setOnCheckedChangeListener { _, on -> updateSchedule(on) }
 
@@ -92,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         fun TimePicker.m() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) minute else currentMinute
         h = scheduleTime.h()
         m = scheduleTime.m()
-        Scheduler.set(this, on, h, m, 50)
+        Scheduler.set(this, on, h, m, Scheduler.count(this))
         updateScheduleStatus()
     }
 

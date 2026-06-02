@@ -18,11 +18,16 @@ object Scheduler {
     private const val KEY_H = "hour"
     private const val KEY_M = "min"
     private const val KEY_COUNT = "count"
+    const val DEFAULT_COUNT = 70
 
     fun enabled(ctx: Context) = prefs(ctx).getBoolean(KEY_ON, false)
     fun hour(ctx: Context) = prefs(ctx).getInt(KEY_H, 2)
     fun minute(ctx: Context) = prefs(ctx).getInt(KEY_M, 0)
-    fun count(ctx: Context) = prefs(ctx).getInt(KEY_COUNT, 50)
+    fun count(ctx: Context) = prefs(ctx).getInt(KEY_COUNT, DEFAULT_COUNT)
+
+    fun setCount(ctx: Context, count: Int) {
+        prefs(ctx).edit().putInt(KEY_COUNT, count).apply()
+    }
 
     fun set(ctx: Context, on: Boolean, h: Int, m: Int, c: Int) {
         prefs(ctx).edit().apply {

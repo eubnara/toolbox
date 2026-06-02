@@ -25,7 +25,7 @@ class FloodService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val count = intent?.getIntExtra("count", 50) ?: 50
+        val count = intent?.getIntExtra("count", Scheduler.DEFAULT_COUNT) ?: Scheduler.DEFAULT_COUNT
         val notif = NotificationCompat.Builder(this, CH_ID)
             .setContentTitle("Cleaning clipboard...")
             .setContentText("Injecting $count clips")
