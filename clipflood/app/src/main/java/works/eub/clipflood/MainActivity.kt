@@ -1,4 +1,4 @@
-package com.example.clipcleaner
+package works.eub.clipflood
 
 import android.Manifest
 import android.content.ClipData

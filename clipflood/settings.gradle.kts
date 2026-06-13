@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ClipCleaner"
+rootProject.name = "ClipFlood"
 include(":app")

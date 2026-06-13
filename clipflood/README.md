@@ -1,6 +1,8 @@
-# Samsung Clipboard Cleaner
+# ClipFlood
 
 삼성 One UI 클립보드 기록 자동 정리 앱
+
+패키지: `works.eub.clipflood`
 
 ## 배경
 
@@ -47,10 +49,15 @@ Edge panel에 고정(pin)된 클립은 영향을 받지 않습니다.
 ## 빌드
 
 ```bash
-git clone <this-repo>
-cd samsung-clipboard-cleaner
+cd clipflood
 ./gradlew assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+릴리즈 AAB 빌드:
+```bash
+./gradlew bundleRelease
+# app/build/outputs/bundle/release/app-release.aab
 ```
 
 ## 권한
