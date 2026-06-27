@@ -40,6 +40,7 @@ class FloodService : Service() {
                 val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 for (i in 0 until count) {
                     cm.setPrimaryClip(ClipData.newPlainText("c", ".$i"))
+                    Thread.sleep(100)
                 }
                 cm.setPrimaryClip(
                     ClipData.newPlainText("c", ".")
