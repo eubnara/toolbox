@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() {
         scheduleTime.setOnTimeChangedListener { _, _, _ -> updateSchedule(scheduleCheck.isChecked) }
         scheduleCheck.isChecked = Scheduler.enabled(this)
         updateScheduleStatus()
+
+        findViewById<TextView>(R.id.version_text).text =
+            "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
     }
 
     private fun runFlood(count: Int) {

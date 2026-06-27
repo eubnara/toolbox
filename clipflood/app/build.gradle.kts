@@ -6,6 +6,9 @@ plugins {
 android {
     namespace = "works.eub.clipflood"
     compileSdk = 34
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "works.eub.clipflood"
