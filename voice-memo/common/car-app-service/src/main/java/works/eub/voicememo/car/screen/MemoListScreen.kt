@@ -21,7 +21,6 @@ import works.eub.voicememo.data.repository.MemoRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 private const val TAG = "VoiceMemoCar"
@@ -147,7 +146,10 @@ class MemoListScreen(
         speechRecognizer?.cancel()
         speechRecognizer?.destroy()
 
-        val recognizer = SpeechRecognizer.createSpeechRecognizer(carContext)
+        val recognizer = SpeechRecognizer.createSpeechRecognizer(carContext) ?: run {
+            Log.e(TAG, "SpeechRecognizer not available")
+            return
+        }
         speechRecognizer = recognizer
 
         recognizer.setRecognitionListener(object : RecognitionListener {
@@ -229,21 +231,7 @@ class MemoListScreen(
     }
 
     private fun resumeRecording() {
-        if (accumulatedText.isBlank()) {
-            doStartListening()
-        } else {
-            speechRecognizer?.startListening(
-                Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(
-                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                    )
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")
-                    putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
-                    putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-                }
-            )
-        }
+        doStartListening()
     }
 
     private fun saveRecording() {
@@ -284,9 +272,4 @@ class MemoListScreen(
         invalidate()
     }
 
-    private fun cleanup() {
-        speechRecognizer?.destroy()
-        speechRecognizer = null
-        scope.cancel()
-    }
 }

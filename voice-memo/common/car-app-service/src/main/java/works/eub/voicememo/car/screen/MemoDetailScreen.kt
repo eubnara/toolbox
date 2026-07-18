@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MemoDetailScreen(
     carContext: CarContext,
@@ -44,9 +43,7 @@ class MemoDetailScreen(
     private fun deleteMemo() {
         scope.launch {
             repository.deleteMemo(memo)
-            withContext(Dispatchers.Main) {
-                screenManager.pop()
-            }
+            screenManager.pop()
         }
     }
 }

@@ -5,6 +5,7 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.os.Bundle
+import android.widget.Toast
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -60,22 +61,23 @@ fun VoiceMemoScreen(
 
     LaunchedEffect(pendingDeletes) {
         if (pendingDeletes.isNotEmpty()) {
+            val toRestore = pendingDeletes
+            pendingDeletes = emptyList()
             val job = launch {
                 kotlinx.coroutines.delay(5000)
                 snackbarHostState.currentSnackbarData?.dismiss()
             }
             val result = snackbarHostState.showSnackbar(
-                message = "${pendingDeletes.size}개 메모 삭제됨",
+                message = "${toRestore.size}개 메모 삭제됨",
                 actionLabel = "취소",
                 duration = SnackbarDuration.Indefinite
             )
             job.cancel()
             if (result == SnackbarResult.ActionPerformed) {
-                pendingDeletes.forEach { memo ->
+                toRestore.forEach { memo ->
                     repository.saveMemo(memo)
                 }
             }
-            pendingDeletes = emptyList()
         }
     }
 
@@ -90,6 +92,10 @@ fun VoiceMemoScreen(
             lastActivityTime = System.currentTimeMillis() + 5000
 
             val recognizer = SpeechRecognizer.createSpeechRecognizer(context)
+            if (recognizer == null) {
+                Toast.makeText(context, "음성 인식을 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
             speechRecognizer.value = recognizer
 
             recognizer.setRecognitionListener(object : RecognitionListener {
@@ -245,6 +251,7 @@ fun VoiceMemoScreen(
                         IconButton(
                             onClick = {
                                 val toDelete = memos.filter { it.id in selectedIds }
+                                pendingDeletes = toDelete
                                 scope.launch {
                                     selectedIds.forEach { id ->
                                         repository.deleteMemoById(id)
@@ -252,7 +259,6 @@ fun VoiceMemoScreen(
                                     selectedIds = emptySet()
                                     selectionMode = false
                                 }
-                                pendingDeletes = toDelete
                             }
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = "삭제")
@@ -356,10 +362,10 @@ fun VoiceMemoScreen(
                             }
                         },
                         onDelete = {
+                            pendingDeletes = listOf(memo)
                             scope.launch {
                                 repository.deleteMemo(memo)
                             }
-                            pendingDeletes = listOf(memo)
                         }
                     )
                 }
