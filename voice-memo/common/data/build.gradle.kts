@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.eub.voicememo.data"
+    namespace = "works.eub.voicememo.data"
     compileSdk = 35
 
     defaultConfig {
@@ -35,8 +35,8 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
+    api(libs.androidx.room.runtime)
+    api(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
 }

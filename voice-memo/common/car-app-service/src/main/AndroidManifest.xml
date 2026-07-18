@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
     <application
-        android:name=".VoiceMemoApplication"
-        android:label="음성 메모">
+        android:name="works.eub.voicememo.car.VoiceMemoApplication">
 
         <service
-            android:name=".VoiceMemoCarAppService"
+            android:name="works.eub.voicememo.car.VoiceMemoCarAppService"
             android:exported="true">
             <intent-filter>
                 <action android:name="androidx.car.app.CarAppService" />

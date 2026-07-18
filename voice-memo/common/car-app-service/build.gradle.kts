@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.eub.voicememo.car"
+    namespace = "works.eub.voicememo.car"
     compileSdk = 35
 
     defaultConfig {
@@ -36,5 +36,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.car.app)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
     implementation(project(":common:data"))
 }

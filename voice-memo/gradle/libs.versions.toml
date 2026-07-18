@@ -12,7 +12,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 coroutines = "1.9.0"
 googleAuth = "21.3.0"
-googleTasks = "v1-rev20241023-2.0.0"
+googleTasks = "1.36.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,8 +33,9 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 google-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googleAuth" }
-google-api-services-tasks = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "googleTasks" }
-google-api-services-tasks-v1 = { group = "com.google.apis", name = "google-api-services-tasks", version.ref = "googleTasks" }
+google-api-services-tasks = { group = "com.google.api-client", name = "google-api-client-android", version = "2.7.2" }
+google-api-services-tasks-v1 = { group = "com.google.apis", name = "google-api-services-tasks", version = "v1-rev20241023-2.0.0" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

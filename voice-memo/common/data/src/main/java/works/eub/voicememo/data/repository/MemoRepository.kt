@@ -1,7 +1,7 @@
-package com.eub.voicememo.data.repository
+package works.eub.voicememo.data.repository
 
-import com.eub.voicememo.data.db.VoiceMemoDao
-import com.eub.voicememo.data.db.VoiceMemoEntity
+import works.eub.voicememo.data.db.VoiceMemoDao
+import works.eub.voicememo.data.db.VoiceMemoEntity
 import kotlinx.coroutines.flow.Flow
 
 class MemoRepository(private val dao: VoiceMemoDao) {

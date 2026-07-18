@@ -1,4 +1,4 @@
-package com.eub.voicememo.data.db
+package works.eub.voicememo.data.db
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow

@@ -1,11 +1,18 @@
-package com.eub.voicememo.car.screen
+package works.eub.voicememo.car.screen
 
 import androidx.car.app.CarContext
 import androidx.car.app.Screen
-import androidx.car.app.model.*
-import com.eub.voicememo.data.db.VoiceMemoEntity
-import com.eub.voicememo.data.repository.MemoRepository
-import kotlinx.coroutines.*
+import androidx.car.app.model.Action
+import androidx.car.app.model.Header
+import androidx.car.app.model.MessageTemplate
+import androidx.car.app.model.Template
+import works.eub.voicememo.data.db.VoiceMemoEntity
+import works.eub.voicememo.data.repository.MemoRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MemoDetailScreen(
     carContext: CarContext,
@@ -26,7 +33,7 @@ class MemoDetailScreen(
             .addAction(
                 Action.Builder()
                     .setTitle("삭제")
-                    .setOnClickAction {
+                    .setOnClickListener {
                         deleteMemo()
                     }
                     .build()
@@ -41,10 +48,5 @@ class MemoDetailScreen(
                 screenManager.pop()
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.cancel()
     }
 }

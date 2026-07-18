@@ -1,4 +1,4 @@
-package com.eub.voicememo.data.db
+package works.eub.voicememo.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

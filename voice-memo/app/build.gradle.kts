@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.eub.voicememo"
+    namespace = "works.eub.voicememo"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.eub.voicememo"
+        applicationId = "works.eub.voicememo"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
@@ -41,13 +41,22 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+        }
+    }
 }
 
 dependencies {
     implementation(project(":common:data"))
+    implementation(project(":common:car-app-service"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
