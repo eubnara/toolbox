@@ -1,6 +1,7 @@
 package works.eub.voicememo.data
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MemoUtilsTest {
@@ -57,9 +58,5 @@ class MemoUtilsTest {
     fun generateTitle_contentWithNewlines_trimmed() {
         val title = MemoUtils.generateTitle("\nHello\n")
         assertEquals("Hello", title)
-    }
-
-    private fun assertTrue(condition: Boolean) {
-        org.junit.Assert.assertTrue(condition)
     }
 }

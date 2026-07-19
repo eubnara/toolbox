@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import works.eub.voicememo.data.MemoUtils
 import works.eub.voicememo.data.db.VoiceMemoEntity
 import works.eub.voicememo.data.repository.MemoRepository
 import kotlinx.coroutines.launch
@@ -171,7 +172,7 @@ fun VoiceMemoScreen(
         if (finalText.isNotBlank()) {
             scope.launch {
                 val memo = VoiceMemoEntity(
-                    title = finalText.take(30) + if (finalText.length > 30) "..." else "",
+                    title = MemoUtils.generateTitle(finalText),
                     content = finalText
                 )
                 repository.saveMemo(memo)
@@ -381,7 +382,7 @@ fun VoiceMemoScreen(
                 scope.launch {
                     val updated = memo.copy(
                         content = newContent,
-                        title = newContent.take(30) + if (newContent.length > 30) "..." else ""
+                        title = MemoUtils.generateTitle(newContent),
                     )
                     repository.updateMemo(updated)
                     editingMemo = null
