@@ -16,6 +16,7 @@ import androidx.car.app.model.ItemList
 import androidx.car.app.model.ListTemplate
 import androidx.car.app.model.Row
 import androidx.car.app.model.Template
+import works.eub.voicememo.data.MemoUtils
 import works.eub.voicememo.data.db.VoiceMemoEntity
 import works.eub.voicememo.data.repository.MemoRepository
 import kotlinx.coroutines.CoroutineScope
@@ -244,7 +245,7 @@ class MemoListScreen(
             isSaving = true
             scope.launch {
                 val memo = VoiceMemoEntity(
-                    title = finalText.take(30) + if (finalText.length > 30) "..." else "",
+                    title = MemoUtils.generateTitle(finalText),
                     content = finalText
                 )
                 repository.saveMemo(memo)
