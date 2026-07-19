@@ -11,6 +11,8 @@ coreKtx = "1.15.0"
 appcompat = "1.7.0"
 material = "1.12.0"
 coroutines = "1.9.0"
+junit = "4.13.2"
+archUnit = "1.2.0"
 googleAuth = "21.3.0"
 googleTasks = "1.36.0"
 
@@ -36,6 +38,11 @@ google-play-services-auth = { group = "com.google.android.gms", name = "play-ser
 google-api-services-tasks = { group = "com.google.api-client", name = "google-api-client-android", version = "2.7.2" }
 google-api-services-tasks-v1 = { group = "com.google.apis", name = "google-api-services-tasks", version = "v1-rev20241023-2.0.0" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+androidx-test-ext = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version = "1.6.2" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
