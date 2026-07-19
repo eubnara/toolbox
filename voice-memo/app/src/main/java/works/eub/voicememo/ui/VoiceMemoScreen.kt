@@ -60,9 +60,8 @@ fun VoiceMemoScreen(
     var pendingDeletes by remember { mutableStateOf<List<VoiceMemoEntity>>(emptyList()) }
 
     LaunchedEffect(pendingDeletes) {
-        if (pendingDeletes.isNotEmpty()) {
-            val toRestore = pendingDeletes
-            pendingDeletes = emptyList()
+        val toRestore = pendingDeletes
+        if (toRestore.isNotEmpty()) {
             val job = launch {
                 kotlinx.coroutines.delay(5000)
                 snackbarHostState.currentSnackbarData?.dismiss()
@@ -78,6 +77,7 @@ fun VoiceMemoScreen(
                     repository.saveMemo(memo)
                 }
             }
+            pendingDeletes = emptyList()
         }
     }
 
