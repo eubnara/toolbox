@@ -10,3 +10,8 @@
 local.properties
 /app/build
 /common/*/build
+
+# release signing: keystore and its passwords
+*.keystore
+*.jks
+key.properties
