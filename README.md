@@ -9,6 +9,7 @@
 | 도구 | 설명 |
 |---|---|
 | [charger-watts](./charger-watts) | 연결된 USB-C PD 충전기의 협상 와트수를 표시 (CLI + KDE Plasma 6 패널 위젯). ThinkPad EC 의 `HWAT` 필드 직접 읽기. |
+| [kakao-wine-check](./kakao-wine-check) | KakaoTalk 용 로컬 Wine 패치(WineHQ bug 60566)를 걷어내도 되는지 매월 확인해 알림. systemd user timer. |
 | [pr-keepalive](./pr-keepalive) | 장기 GitHub PR 에 주기적으로 짧은 코멘트를 달아 stale-bot 의 자동 close 를 막음. systemd user timer 로 부팅 + 매일 1회. |
 
 ## 디렉터리 구조

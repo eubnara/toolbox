@@ -1,0 +1,10 @@
+[Unit]
+Description=Monthly check of KakaoTalk Wine hotplug patch status
+
+[Timer]
+OnCalendar=monthly
+RandomizedDelaySec=1d
+Persistent=true
+
+[Install]
+WantedBy=timers.target
