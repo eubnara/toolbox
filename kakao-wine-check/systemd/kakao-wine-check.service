@@ -1,0 +1,7 @@
+[Unit]
+Description=Check KakaoTalk Wine hotplug patch status (WineHQ bug 60566)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/bin/kakao-wine-check
