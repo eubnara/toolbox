@@ -1,7 +1,10 @@
 [Unit]
 Description=Check KakaoTalk Wine hotplug patch status (WineHQ bug 60566)
-After=network-online.target
 
 [Service]
 Type=oneshot
+# network-online.target does not exist in the user manager. With Persistent=true
+# a missed run fires right after login, possibly before Wi-Fi is up, so wait for
+# the network here (the leading "-" keeps going if it times out).
+ExecStartPre=-/usr/bin/nm-online -q -t 60
 ExecStart=%h/bin/kakao-wine-check

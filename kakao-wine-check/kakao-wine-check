@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Monthly reminder for the local KakaoTalk Wine patch (run by kakao-wine-check.timer).
 # Notifies when upstream bug 60566 changes state or the system Wine was upgraded.
 
@@ -8,7 +8,7 @@ SYSTEM_WINE=/opt/wine-stable/bin/wine
 
 system_ver=$("$SYSTEM_WINE" --version 2>/dev/null)
 patched_ver=$("$PATCHED_WINE" --version 2>/dev/null)
-bug=$(curl -sS -m 30 "https://bugs.winehq.org/rest/bug/$BUG?include_fields=status,resolution" |
+bug=$(curl -fsS -m 30 "https://bugs.winehq.org/rest/bug/$BUG?include_fields=status,resolution" |
       jq -r '.bugs[0] | "\(.status) \(.resolution)"' 2>/dev/null)
 
 msgs=()
